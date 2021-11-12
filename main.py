@@ -6,18 +6,18 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
-target = 42
-targetCorrector = 1
-speed = 200
-speedCorrector = 1
-
-
 ev3 = EV3Brick()
 motorLeft = Motor(Port.C)
 motorRight = Motor(Port.B)
 colorSensor = ColorSensor(Port.S2)
 #touchSensor = TouchSensor(Port.S1)
-watch = StopWatch()
+#watch = StopWatch()
+
+target = 42
+target = colorSensor.reflection()
+targetCorrector = 1
+speed = 200
+speedCorrector = 1.5
 
 ev3.speaker.beep()
 
@@ -28,5 +28,14 @@ ev3.speaker.beep()
 while True:
   color = colorSensor.reflection()
   print(color)
-  motorLeft.run(((speed * (color / target) ** targetCorrector) ** speedCorrector))
-  motorRight.run(((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
+  #motorLeft.run(((speed * (color / target) ** targetCorrector) ** speedCorrector))
+  #motorRight.run(((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
+  if (color / target > 1):
+    motorLeft.run((speed * (color / target) * speedCorrector))
+    motorRight.run((speed * ((target - color + target) / target) / speedCorrector))
+  elif (color / target < 1):
+    motorLeft.run((speed * (color / target) / speedCorrector))
+    motorRight.run((speed * ((target - color + target) / target) * speedCorrector))
+  else:
+    motorLeft.run((speed * (color / target)))
+    motorRight.run((speed * ((target - color + target) / target)))
