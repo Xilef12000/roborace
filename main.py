@@ -17,7 +17,8 @@ target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
 speed = 200
-speedCorrector = 1.5
+speedCorrectorBlack = 1.3
+speedCorrectorWhite = 1.5
 
 ev3.speaker.beep()
 
@@ -28,14 +29,15 @@ ev3.speaker.beep()
 while True:
   color = colorSensor.reflection()
   print(color)
-  #motorLeft.run(((speed * (color / target) ** targetCorrector) ** speedCorrector))
-  #motorRight.run(((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
+  #motorLeft.run(int(((speed * (color / target) ** targetCorrector) ** speedCorrector)))
+  #motorRight.run(int((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
   if (color / target > 1):
-    motorLeft.run((speed * (color / target) * speedCorrector))
-    motorRight.run((speed * ((target - color + target) / target) / speedCorrector))
+    color = color * 1.4
+    motorLeft.run((speed * (color / target) * speedCorrectorWhite))
+    motorRight.run((speed * ((target - color + target) / target) / speedCorrectorWhite))
   elif (color / target < 1):
-    motorLeft.run((speed * (color / target) / speedCorrector))
-    motorRight.run((speed * ((target - color + target) / target) * speedCorrector))
+    motorLeft.run((speed * (color / target) / speedCorrectorBlack))
+    motorRight.run((speed * ((target - color + target) / target) * speedCorrectorBlack))
   else:
     motorLeft.run((speed * (color / target)))
     motorRight.run((speed * ((target - color + target) / target)))
