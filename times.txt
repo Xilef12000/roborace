@@ -1,9 +1,0 @@
-Speed:	Time:
-300:	14s
-400:	11.5s
-500:	10s
-600:	9s
-700:	8.7s
-800:	9s
-
-Time:	White:	Black:
