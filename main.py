@@ -16,7 +16,7 @@ colorSensor = ColorSensor(Port.S2)
 target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
-speed = 200
+speed = 700
 speedCorrectorBlack = 1.3
 speedCorrectorWhite = 1.5
 
