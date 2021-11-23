@@ -5,6 +5,7 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
+import time
 
 ev3 = EV3Brick()
 motorLeft = Motor(Port.C)
@@ -26,10 +27,17 @@ gyroSensor.reset_angle(0)
 #while not touchSensor.pressed():
 #    #wait(10)
 #    pass
-
+timeNow = time.time()
+angle = 0
 while True:
   color = colorSensor.reflection()
-  angle = gyroSensor.angle()
+  #angle = gyroSensor.angle()
+  speed = gyroSensor.speed() - 79
+  timeOld = timeNow
+  timeNow = time.time()
+  timeDelta = timeNow - timeOld
+  angleDelta = speed * timeDelta
+  angle += angleDelta
   print(angle)
   #print(color)
   #motorLeft.run(int(((speed * (color / target) ** targetCorrector) ** speedCorrector)))
