@@ -27,18 +27,25 @@ gyroSensor.reset_angle(0)
 #while not touchSensor.pressed():
 #    #wait(10)
 #    pass
+
 timeNow = time.time()
 angle = 0
+#angleAverage = []
 while True:
   color = colorSensor.reflection()
   #angle = gyroSensor.angle()
-  speed = gyroSensor.speed() - 79
+  speed = gyroSensor.speed() - 79.436
   timeOld = timeNow
   timeNow = time.time()
   timeDelta = timeNow - timeOld
   angleDelta = speed * timeDelta
   angle += angleDelta
   print(angle)
+
+  #angleAverage.append(gyroSensor.speed())
+  #if len(angleAverage) >= 1000:
+  #  print(sum(angleAverage)/len(angleAverage))
+
   #print(color)
   #motorLeft.run(int(((speed * (color / target) ** targetCorrector) ** speedCorrector)))
   #motorRight.run(int((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
