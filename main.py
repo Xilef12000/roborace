@@ -17,17 +17,19 @@ touchSensor = TouchSensor(Port.S1)
 ultrasonicSensor = UltrasonicSensor(Port.S3)
 #watch = StopWatch()
 
-angleTarget = 120
+angleTarget = -240
 angleTargetAccuracy = 1
-speedOffset = 28.91
+speedOffset = 0.26
 turnSpeed = 100
 target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
 speed = 700
-speed = 200
+speed = 500
 speedCorrectorBlack = 1.3
+speedCorrectorBlack = 1.2
 speedCorrectorWhite = 1.5
+speedCorrectorWhite = 1.3
 
 ev3.speaker.beep()
 gyroSensor.reset_angle(0)
@@ -35,6 +37,7 @@ time.sleep(0.5)
 while not touchSensor.pressed():
   #wait(10)
   pass
+target = colorSensor.reflection()
 timeNow = time.time()
 angle = 0
 angleAverage = []
