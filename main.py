@@ -14,6 +14,7 @@ motorShoot = Motor(Port.A)
 colorSensor = ColorSensor(Port.S2)
 gyroSensor = GyroSensor(Port.S4)
 touchSensor = TouchSensor(Port.S1)
+ultrasonicSensor = UltrasonicSensor(Port.S3)
 #watch = StopWatch()
 
 angleTarget = 120
@@ -46,6 +47,7 @@ while True:
   angleDelta = AngleSpeed * timeDelta
   angle += angleDelta
   #print(angle)
+  distance = ultrasonicSensor.distance(silent=False)
   color = colorSensor.reflection()
   #angleAverage.append(gyroSensor.speed())
   #if len(angleAverage) >= 1000:
@@ -53,6 +55,7 @@ while True:
 
   #print(color)
   if (color < 90):
+  #if (color < 90 and distance < 300):
     print("grayscale")
     #motorLeft.run(int(((speed * (color / target) ** targetCorrector) ** speedCorrector)))
     #motorRight.run(int((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
