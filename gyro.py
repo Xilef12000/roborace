@@ -13,52 +13,44 @@ motorRight = Motor(Port.B)
 motorShoot = Motor(Port.A)
 colorSensor = ColorSensor(Port.S2)
 gyroSensor = GyroSensor(Port.S4)
-touchSensor = TouchSensor(Port.S1)
-ultrasonicSensor = UltrasonicSensor(Port.S3)
 #watch = StopWatch()
 
-angleTarget = -240
+angleTarget = 120
 angleTargetAccuracy = 1
-speedOffset = 0.26
+speedOffset = 79.436
+speedOffset = 0
 turnSpeed = 100
 target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
 speed = 700
-speed = 500
+speed = 200
 speedCorrectorBlack = 1.3
-speedCorrectorBlack = 1.2
 speedCorrectorWhite = 1.5
-speedCorrectorWhite = 1.3
 
 ev3.speaker.beep()
 gyroSensor.reset_angle(0)
 time.sleep(0.5)
-while not touchSensor.pressed():
-  #wait(10)
-  pass
-target = colorSensor.reflection()
 timeNow = time.time()
 angle = 0
 angleAverage = []
 while True:
-  #angle = gyroSensor.angle()
-  AngleSpeed = gyroSensor.speed() - speedOffset
-  timeOld = timeNow
-  timeNow = time.time()
-  timeDelta = timeNow - timeOld
-  angleDelta = AngleSpeed * timeDelta
-  angle += angleDelta
-  #print(angle)
-  distance = ultrasonicSensor.distance(silent=False)
-  color = colorSensor.reflection()
-  #angleAverage.append(gyroSensor.speed())
-  #if len(angleAverage) >= 1000:
-  #  print(sum(angleAverage)/len(angleAverage))
+  while True:
+    #angle = gyroSensor.angle()
+    AngleSpeed = gyroSensor.speed() - speedOffset
+    timeOld = timeNow
+    timeNow = time.time()
+    timeDelta = timeNow - timeOld
+    angleDelta = AngleSpeed * timeDelta
+    angle += angleDelta
+    #print(angle)
+    color = colorSensor.reflection()
+    angleAverage.append(gyroSensor.speed())
+    if len(angleAverage) >= 1000:
+      print(sum(angleAverage)/len(angleAverage))
 
   #print(color)
   if (color < 90):
-  #if (color < 90 and distance < 300):
     print("grayscale")
     #motorLeft.run(int(((speed * (color / target) ** targetCorrector) ** speedCorrector)))
     #motorRight.run(int((speed * ((target - color + target) / target) ** targetCorrector) ** speedCorrector))
