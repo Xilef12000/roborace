@@ -18,6 +18,13 @@ colorSensor = ColorSensor(Port.S2)
 #variables
 lastDeviation = 0
 lastDelta = 0
+integral = 0
+rateOChange = 0
+allDelta = {}
+lastTurnrate = 0
+allDeviation = {}
+deltaTurnrate = 0
+lastDeltaTurnrate = 0
 
 #constants
 #TARGET = 42 (if taking it directly doesnt work)
@@ -46,16 +53,32 @@ while True:
   color = colorSensor.reflection()
   #print(color)
   deviation = TARGET - color
-  integral = (deviation + lastDeviation)  #only works correctly if the loops always take the same time 
+
+#if the deviation is very small(the roboter is in the middle of the track) all deviations get reset to reset the integral
+  if (deviation > -0.01) and (deviation < 0.01): 
+    allDeviation = {}
   
+  allDeviation.append(deviation)
+  integral = sum(allDeviation)
   delta = lastDeviation - deviation
-  rateOChange = (delta + lastDelta)/2    #= Mittlere Änderungsrate
   
-  #Multiplies the measured values with the fitting Corrector and than adds them to get the turnrate
-  turnrate = P * deviation + I * integral + D * rateOChange 
+#This is here to determine if there is a turningpoint
+  turnrate = P * deviation + I * integral + D * rateOChange
+
+  deltaTurnrate = lastTurnrate - turnrate
+  
+#This determines if the previos point was the turnig point if yes all deltas get reset to reset the turnrate
+  if abs(deltaTurnrate) < abs(lastDeltaTurnrate):
+    allDelta = {}
+
+  allDelta.append(delta)
+
+  lastDeltaTurnrate = deltaTurnrate
+  lastDeviation = deviation
+  lastTurnrate = turnrate
+
+  rateOChange = sum(allDelta)/range(allDelta)
+  
+  turnrate = P * deviation + I * integral + D * rateOChange #This is the final turnrate which is actually used
 
   robot.drive(turnrate, SPEED)
-  
-  #replaces the old values
-  lastDeviation = deviation
-  lastDelta = delta
