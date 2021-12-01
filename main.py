@@ -17,19 +17,16 @@ touchSensor = TouchSensor(Port.S1)
 ultrasonicSensor = UltrasonicSensor(Port.S3)
 #watch = StopWatch()
 
-angleTarget = -240
+angleTarget = -240  #angle of the shooting area relative to the start point
 angleTargetAccuracy = 1
-speedOffset = 0.26
-turnSpeed = 100
+speedOffset = 0.0 #corecting of the gyro values
+turnSpeed = 100 #speed when turning at shooting area
 target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
-speed = 700
-speed = 500
-speedCorrectorBlack = 1.3
-speedCorrectorBlack = 1.2
-speedCorrectorWhite = 1.5
-speedCorrectorWhite = 1.3
+speed = 500 #roboter driving speed maximum 700 (900 is the absolute maximunm)
+speedCorrectorBlack = 1.2 # 1.1 to 1.5
+speedCorrectorWhite = 1.3 # 1.2 to 1.7
 
 ev3.speaker.beep()
 gyroSensor.reset_angle(0)
