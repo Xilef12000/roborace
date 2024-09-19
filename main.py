@@ -7,11 +7,11 @@ from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
 ev3 = EV3Brick()
-motorLeft = Motor(Port.C, Direction.COUNTERCLOCKWISE)
+motorLeft = Motor(Port.C, Direction.CLOCKWISE)
 motorRight = Motor(Port.B, Direction.COUNTERCLOCKWISE)
 #-> could be wrong(f.e. could be "CLOCKWISE")
 colorSensor = ColorSensor(Port.S2)
-#touchSensor = TouchSensor(Port.S1)
+touchSensor = TouchSensor(Port.S1)
 #watch = StopWatch()
 
 
@@ -20,15 +20,15 @@ lastDeviation = 0
 lastDelta = 0
 integral = 0
 rateOChange = 0
-allDelta = {}
+allDelta = []
 lastTurnrate = 0
-allDeviation = {}
+allDeviation = []
 deltaTurnrate = 0
 lastDeltaTurnrate = 0
 
 #constants
 #TARGET = 42 (if taking it directly doesnt work)
-TARGET = colorSensor.reflection()
+
 SPEED = 200
 
 WHEEL_DIAMETER = 55.5
@@ -38,15 +38,17 @@ AXLE_TRACK = 104
 robot = DriveBase(motorLeft, motorRight, WHEEL_DIAMETER, AXLE_TRACK)
 
 #The PID-values that we need to determine
-P = 0
-I = 0
-D = 0
+P = 0.8
+I = 0.08
+D = 0.005
 
 ev3.speaker.beep()
 
-#while not touchSensor.pressed():
-#    #wait(10)
-#    pass
+while not touchSensor.pressed():
+    wait(10)
+    pass
+
+TARGET = colorSensor.reflection()
 
 while True:
   #measures the current values
@@ -56,20 +58,20 @@ while True:
 
 #if the deviation is very small(the roboter is in the middle of the track) all deviations get reset to reset the integral
   if (deviation > -0.01) and (deviation < 0.01): 
-    allDeviation = {}
+    allDeviation = []
   
   allDeviation.append(deviation)
   integral = sum(allDeviation)
   delta = lastDeviation - deviation
   
 #This is here to determine if there is a turningpoint
-  turnrate = P * deviation + I * integral + D * rateOChange
+  turnrate = P * deviation + I * -integral + D * rateOChange
 
   deltaTurnrate = lastTurnrate - turnrate
   
 #This determines if the previos point was the turnig point if yes all deltas get reset to reset the turnrate
   if abs(deltaTurnrate) < abs(lastDeltaTurnrate):
-    allDelta = {}
+    allDelta = []
 
   allDelta.append(delta)
 
@@ -77,8 +79,13 @@ while True:
   lastDeviation = deviation
   lastTurnrate = turnrate
 
-  rateOChange = sum(allDelta)/range(allDelta)
+  rateOChange = sum(allDelta)/len(allDelta)
   
-  turnrate = P * deviation + I * integral + D * rateOChange #This is the final turnrate which is actually used
+  turnrate = P * deviation + I * -integral + D * rateOChange #This is the final turnrate which is actually used
+
+
+  print(deviation)
+  print(integral)
+  print(rateOChange)
 
   robot.drive(turnrate, SPEED)
