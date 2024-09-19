@@ -17,16 +17,16 @@ touchSensor = TouchSensor(Port.S1)
 ultrasonicSensor = UltrasonicSensor(Port.S3)
 #watch = StopWatch()
 
-angleTarget = -240  #angle of the shooting area relative to the start point
+angleTarget = -180  #angle of the shooting area relative to the start point
 angleTargetAccuracy = 1
 speedOffset = 0.0 #correcting of the gyro values
-turnSpeed = 100 #speed when turning at shooting area
+turnSpeed = 200 #speed when turning at shooting area
 target = 42
 target = colorSensor.reflection()
 targetCorrector = 1
-speed = 500 #robot driving speed maximum 700 (900 is the absolute maximum)
-speedCorrectorBlack = 1.2 # 1.1 to 1.5
-speedCorrectorWhite = 1.3 # 1.2 to 1.7
+speed = 700 #robot driving spe4d maximum 700 (900 is the absolute maximum)
+speedCorrectorBlack = 1.0 # 1.1 to 1.5
+speedCorrectorWhite = 1.1 # 1.2 to 1.7
 
 ev3.speaker.beep()
 gyroSensor.reset_angle(0)
@@ -51,7 +51,6 @@ while True:
   #if (color < 90 and distance < 300):  # |
     print("grayscale")
     if (color / target > 1): #drive in white areas
-      color = color * 1.4
       motorLeft.run((speed * (color / target) * speedCorrectorWhite))
       motorRight.run((speed * ((target - color + target) / target) / speedCorrectorWhite))
     elif (color / target < 1): #drive in black areas
